@@ -1,4 +1,11 @@
 require('dotenv').config();
+
+//****IMPORTANT*****/
+//HAS TO USE SOX VERSION 14.4.1 OF SOX IN ORDER TO WORK
+//Download version 14.4.1: https://sourceforge.net/projects/sox/files/sox/14.4.1/
+
+
+
 // Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -222,7 +229,8 @@ function infiniteStream(
       threshold: 0, // Silence threshold
       silence: 1000,
       keepSilence: true,
-      recordProgram: 'rec', // Try also "arecord" or "sox"
+      recordProgram: 'arecord', // Try also "arecord" or "sox",
+      defaultDevice: 'voicemeeterout'
     })
     .stream()
     .on('error', err => {
@@ -251,7 +259,8 @@ require('yargs')
         opts.encoding,
         opts.sampleRateHertz,
         opts.languageCode,
-        opts.streamingLimit
+        opts.streamingLimit,
+        opts.defaultDevice
       )
   )
   .options({
@@ -268,6 +277,13 @@ require('yargs')
       global: true,
       requiresArg: true,
       type: 'number',
+    },
+    defaultDevice: {
+      alias: 'dd',
+      default: 'voicemeeterout',
+      global: true,
+      requiresArg: true,
+      type: 'string',
     },
     languageCode: {
       alias: 'l',
