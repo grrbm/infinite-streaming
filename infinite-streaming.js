@@ -68,6 +68,7 @@ function infiniteStream(
 
   const chalk = require('chalk');
   const {Writable} = require('stream');
+  const fs = require('fs');
 
   // Node-Record-lpcm16
   const recorder = require('node-record-lpcm16');
@@ -139,6 +140,10 @@ function infiniteStream(
 
     if (stream.results[0].isFinal) {
       process.stdout.write(chalk.green(`${stdoutText}\n`));
+      
+      fs.appendFile('output.txt', `${stdoutText}\n` , function (err) {
+        if (err) throw err;
+      });
 
       isFinalEndTime = resultEndTime;
       lastTranscriptWasFinal = true;
@@ -294,7 +299,7 @@ require('yargs')
     },
     streamingLimit: {
       alias: 's',
-      default: 290000,
+      default: 1*60*1000, //ONE MINUTE
       global: true,
       requiresArg: true,
       type: 'number',
